@@ -1271,7 +1271,7 @@ var telefono;
       url= "";
     }
     else{
-      url='http://'+d3.select(this).attr("url");
+      url='<a href= "http://'+d3.select(this).attr("url")+'">'+"</a>";
     }
 
     if (!d3.select(this).attr("email"))
@@ -1381,10 +1381,6 @@ var circle= features.selectAll("circle")
     .on("mouseout",noradius);
 
 console.log(d.properties.gid-1);
-
-features.selectAll("path").on("mouseover",hideTooltip)
-    .on("mousemove",hideTooltip)
-    .on("mouseout",hideTooltip);
 
 //////////////////////////////////////////
 
@@ -1571,8 +1567,6 @@ d3.json("zats.topojson",function(error,geodata) {
     .on("mousemove",moveTooltip)
     .on("mouseout",hideTooltip)
     .on("click",clicked);
-
-
 
   slider.noUiSlider.destroy();  
 
