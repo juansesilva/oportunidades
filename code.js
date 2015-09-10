@@ -431,9 +431,25 @@ $('#modos :checkbox').change(function () {//si la casilla fue checkeada:
     console.log(checkvar);
     if(triggerzats==1 || triggermanz==1)paint(checkvar);
     slider.noUiSlider.set(slider.noUiSlider.get());
+    if(checkvar==0){window.alert("Por favor, selecciona al menos un tipo de entidad.");}
 
   }
 });
+
+//tooltip para mostrar la escala del mapa
+var escala = d3.select("#main").append("div")
+  .attr("class","escala");
+
+escala.style("display","block").html("<p>Escala: 1:" + (60000/(zoom.scale())).toFixed(0));
+//tooltip para mostrar la escala de la regla
+var regla = d3.select("#main").append("div")
+  .attr("class","regla2");
+
+regla.style("display","block").text((2000/(zoom.scale())).toFixed(0) + " metros");
+
+var leyenda = d3.select("#main").append("div")
+  .attr("class","leyenda");
+
 
 
 
@@ -443,7 +459,8 @@ function zoomed() {
       .selectAll("path").style("stroke-width", 1 / zoom.scale() + "px" );
 
       svg.selectAll("circle").each(function(d,i){
-        if(d3.select(this).attr("r")!=0){
+        if(d3.select(this).attr("r")!=0 && d3.select(this).attr("gid")>0){
+
           d3.select(this).attr("r",4/zoom.scale());
         }
       });
@@ -544,16 +561,7 @@ function zoomed() {
 
 // }); //cierra función de carga del archivo TopoJSON
 
-//tooltip para mostrar la escala del mapa
-var escala = d3.select("#main").append("div")
-  .attr("class","escala");
 
-escala.style("display","block").html("<p>Escala: 1:" + (60000/(zoom.scale())).toFixed(0));
-//tooltip para mostrar la escala de la regla
-var regla = d3.select("#main").append("div")
-  .attr("class","regla2");
-
-regla.style("display","block").text((2000/(zoom.scale())).toFixed(0) + " metros");
 
 // var selectedmode = new Array(); //arreglo para guardar los modos seleccionados
 // var selectedprop = new Array(); //arreglo para guardar los propositos seleccionados
@@ -1271,7 +1279,7 @@ var telefono;
       url= "";
     }
     else{
-      url='<a href= "http://'+d3.select(this).attr("url")+'">'+"</a>";
+      url='http://'+d3.select(this).attr("url");
     }
 
     if (!d3.select(this).attr("email"))
@@ -1320,7 +1328,8 @@ console.log(d3.select(this).attr("url"));
 
 }
 function noradius(d){
-  d3.select(this).transition().duration(500).attr("r",4/zoom.scale()).attr("fill","red");
+
+  d3.select(this).transition().duration(500).attr("r",4/zoom.scale()).attr("fill",function(d,i){if(d3.select(this).attr("gid")<353){return "red";}else{return "blue";}});
   //hideTooltip();
 }
 
@@ -1376,11 +1385,16 @@ var circle= features.selectAll("circle")
     .attr("telefono", function(d,i){return d.properties.telefono})
     .attr("email", function(d,i){return d.properties.email})
     .attr("mpio", function(d,i){return d.properties.nombremuni})
+    .attr("gid",function(d,i){return d.properties.gid})
     .on("mouseover",radius)
     .on("mousemove",moveTooltip)
     .on("mouseout",noradius);
 
 console.log(d.properties.gid-1);
+
+features.selectAll("path").on("mouseover",hideTooltip)
+    .on("mousemove",hideTooltip)
+    .on("mouseout",hideTooltip);
 
 //////////////////////////////////////////
 
@@ -1434,8 +1448,9 @@ else{
   .data(auxmask)
   .transition()
   .duration(100)
-  .attr("r", function(d,i){return (auxmask[i]*4)/zoom.scale()})
-  .attr("fill","red");
+  .attr("r", function(d,i){return (auxmask[i]*4)/zoom.scale()});
+
+  features.selectAll("circle").each(function(d,i){if(d3.select(this).attr("gid")<353){d3.select(this).attr("fill","red");}else{d3.select(this).attr("fill","blue");}});
 
 
     
@@ -1467,6 +1482,10 @@ else{
 
 features.selectAll("path").attr("class",function(d) {return "q" + d.properties.mpio; });
 d3.select(this).attr("class","path paint");
+
+svg.append("circle").attr("cx",750).attr("cy",540).attr("r",5).attr("fill","blue").attr("gid",-1);
+svg.append("circle").attr("cx",750).attr("cy",555).attr("r",5).attr("fill","red").attr("gid",-1);
+leyenda.style("display","block").html("<p>Entidades públicas.</br>Entidades privadas.</p>");
 
 
 
@@ -1552,6 +1571,8 @@ function loadzats(){
   console.log("cargar zats");
   features.selectAll("path").remove();
   features.selectAll("circle").remove();
+  svg.selectAll("circle").remove();
+  leyenda.style("display","none");
   
 d3.json("zats.topojson",function(error,geodata) {
   if (error) return console.log(error); //unknown error, check the console
@@ -1567,6 +1588,8 @@ d3.json("zats.topojson",function(error,geodata) {
     .on("mousemove",moveTooltip)
     .on("mouseout",hideTooltip)
     .on("click",clicked);
+
+
 
   slider.noUiSlider.destroy();  
 
@@ -1661,6 +1684,8 @@ function loadmanzanas(d){
   console.log("cargar manzanas");
   features.selectAll("path").remove();
   features.selectAll("circle").remove();
+  svg.selectAll("circle").remove();
+  leyenda.style("display","none");
   
 
 d3.json("manzanas.topojson",function(error,geodata) {
