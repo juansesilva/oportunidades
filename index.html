@@ -14,7 +14,7 @@ body {
 /* color del mapa-dosquebradas*/
 path {
   stroke-width: 1px;
-  stroke: #050604;
+  stroke: #1B1B1B;
   fill: #999;
   cursor: pointer;
 }
@@ -48,11 +48,11 @@ path.qclick {
 }
 
 path.q001 {
-  fill: #c6dbef;
+  fill: #e9eff6;
 }
 
 path.q170 {
-  fill: #3182bd;
+  fill: #bdd7e7;
 }
 
 /*div.info {
@@ -81,7 +81,7 @@ div.info {
 }
 
 svg {
-  border-style: solid; 
+  /*border-style: solid; */
   border-color: gray;
   border-width: 1px;
 }
@@ -138,7 +138,7 @@ div.leyenda {
 
 #buttons-map{
   position: absolute;
-  margin-left:300px;
+  margin-left:350px;
 }
 
 /* propiedades generales*/
@@ -203,7 +203,7 @@ margin : 30px auto 0 auto;
   background-color : #FFF;
   float : left;
   height : 150px;
-  width : 175px;
+  width : 225px;
   display: inline-block;
 }
 
@@ -255,12 +255,12 @@ margin : 30px auto 0 auto;
 
 /* color del mapa-Pereira*/
 
-path.paint { fill: green; }
+path.paint { fill: #41b6c4; }
 
 
 
 path:hover, path.highlighted {
-  fill: tomato;
+  fill: #41b6c4;
 }
 
 
@@ -332,7 +332,6 @@ h1 {
     <div class="btn-group" role="group" aria-label="Basic example" id='buttons-map'>
       <button type="button" id="buttonzats" class="btn btn-primary active" >Zats</button>
       <button type="button" id="buttonmanzanas" class="btn btn-warning">Manzanas</button>
-      <button type="button" class="btn btn-info">Otro</button>
     </div>
 
     <!-- contenedor del indicador de norte-->
@@ -363,6 +362,8 @@ h1 {
       <input id="2" type="checkbox" checked/> Ver entidades Privadas<br>
       
     </DIV>
+
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="instrucciones">Instrucciones</button>
   </div>
  
  <p>&nbsp;</p>
@@ -377,16 +378,7 @@ h1 {
     <p>&nbsp;</p>
 
 
-  
-    <p>Este botón no hace nada<br>
-    </p>
-    <p>
-      <input name="updateButton" 
-             type="button" 
-             value="No hago nada" 
-             id ="refresh"
-             onclick="clear()" />
-    </p>
+
 
   </div>
 
@@ -408,13 +400,36 @@ h1 {
   </div>
 </div>
 
+<div class="modal fade" id="prizePopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+                Cómo se utiliza esta visualización
+            </h4>
+        </div>
+        <div class="modal-body">
+            Esta visualización se compone de dos partes: Coropleta que se activa al cargar la página o al presionar los botones zats (azul) o manzanas (naranja), donde la intensidad del color en el mapa ilustra la cantidad de oportunidades alcanzadas con el umbral establecido por la barra de deslizamiento o el campo de texto, ubicadas debajo del mapa. Así mismo, el usuario también puede decidir si visualizar entre entidades privadas y públicas por medio de las cajas de chequeo ubicadas bajo el mapa. Al pasar el mouse sobre cada zat/manzana es posible ver la cantidad de oportunidades alcanzadas.
+        </div>
+        <div class="modal-body">
+            La segunda parte de la visualización consiste en la visualización exacta de las entidades en el mapa, discriminando por color las públicas de las privadas. Al dar click sobre un zat/manzana, se calculan y grafican las entidades que se encuentran a una distancia menor al umbral establecido por medio de la barra de deslizamiento. Al pasar el mouse sobre cada entidad, se puede ver información de interés como nombre, teléfono, gerente, dirección y correo electrónico o pàgina web. Para regresar a la vista de coropleta, es necesario dar click a los botones zats (azul) o manzanas (naranja) según el mapa que se desee ver.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+        </div>
+    </div>
+</div>
+
 <!-- importo librerías para hacer uso de métodos D3 -->
 <script src="lib/nouislider.min.js"></script>
 <script src="lib/jquery-2.1.4.min.js"></script>
 <script src="lib/d3.v3.min.js"></script>
 <script src="lib/topojson.v1.min.js"></script>
 <script src="lib/queue.v1.min.js"></script>
-<!--<script src="lib/bootstrap.min.js"></script>
+<script src="lib/bootstrap.min.js"></script>
 
 
 

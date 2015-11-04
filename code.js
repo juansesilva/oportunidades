@@ -2,6 +2,14 @@
 
 //  */
 
+$(window).load(function() {
+    $('#prizePopup').modal('show');
+});
+
+$("#instrucciones").click(function() {
+    $('#prizePopup').modal('show');
+});
+
 //Map dimensions (in pixels)
 var width = 898,
     height = 598;
@@ -1200,7 +1208,14 @@ function zoomClick() {
         view = {x: translate[0], y: translate[1], k: zoom.scale()};
 
     d3.event.preventDefault();
-    direction = (this.id === 'zoom_in') ? 1 : -1;
+    if (this.id == 'zoom_in'){
+      direction = 1;
+    }
+    else if (this.id == 'zoom_out'){
+      direction = -1;
+    }
+    else{direction=0;}
+    //direction = (this.id === 'zoom_in') ? 1 : -1;
     target_zoom = zoom.scale() * (1 + factor * direction);
     console.log("click " + direction);
 
@@ -1244,6 +1259,21 @@ var tooltipOffset = {x: 5, y: -25};
 //Create a tooltip, hidden at the start
 function showTooltip(d) {
   //moveTooltip();
+
+    for(var x=0; x<maxop.length;x++){
+  maxop[x]=0;
+}
+
+  limit=slider.noUiSlider.get();
+
+
+  for (var i = 0; i < sumused.length; i++) {
+    for (var j = 0; j < sumused[0].length; j++) {
+      if(limit>=sumused[i][j]){
+        maxop[i]+=1;
+      }
+    };
+  };
 
   if(iszat==1){
     info.style("display","block")
@@ -1329,7 +1359,7 @@ console.log(d3.select(this).attr("url"));
 }
 function noradius(d){
 
-  d3.select(this).transition().duration(500).attr("r",4/zoom.scale()).attr("fill",function(d,i){if(d3.select(this).attr("gid")<353){return "red";}else{return "blue";}});
+  d3.select(this).transition().duration(500).attr("r",4/zoom.scale()).attr("fill",function(d,i){if(d3.select(this).attr("gid")<353){return "#f1a340";}else{return "#998ec3";}});
   //hideTooltip();
 }
 
@@ -1450,7 +1480,7 @@ else{
   .duration(100)
   .attr("r", function(d,i){return (auxmask[i]*4)/zoom.scale()});
 
-  features.selectAll("circle").each(function(d,i){if(d3.select(this).attr("gid")<353){d3.select(this).attr("fill","red");}else{d3.select(this).attr("fill","blue");}});
+  features.selectAll("circle").each(function(d,i){if(d3.select(this).attr("gid")<353){d3.select(this).attr("fill","#f1a340");}else{d3.select(this).attr("fill","#998ec3");}});
 
 
     
@@ -1469,7 +1499,7 @@ else{
 //       .attr("cx",(path2.centroid(feat)[0]))
 //       .attr("cy",(path2.centroid(feat)[1]))
 //       .attr("r",4/zoom.scale())
-//       .attr("fill","red")
+//       .attr("fill","#f1a340")
 //       .on("mouseover",radius)
 //       .on("mouseout",noradius);
 //   }
@@ -1481,10 +1511,14 @@ else{
 
 
 features.selectAll("path").attr("class",function(d) {return "q" + d.properties.mpio; });
-d3.select(this).attr("class","path paint");
 
-svg.append("circle").attr("cx",750).attr("cy",540).attr("r",5).attr("fill","blue").attr("gid",-1);
-svg.append("circle").attr("cx",750).attr("cy",555).attr("r",5).attr("fill","red").attr("gid",-1);
+d3.select(this).attr("class","path paint")
+  .on("mouseover",showTooltip)
+  .on("mousemove",moveTooltip)
+  .on("mouseout",hideTooltip);
+
+svg.append("circle").attr("cx",750).attr("cy",540).attr("r",5).attr("fill","#998ec3").attr("gid",-1);
+svg.append("circle").attr("cx",750).attr("cy",555).attr("r",5).attr("fill","#f1a340").attr("gid",-1);
 leyenda.style("display","block").html("<p>Entidades públicas.</br>Entidades privadas.</p>");
 
 
@@ -1533,7 +1567,7 @@ if(state==0){
   .transition()
   .duration(200)
   .attr("r", function(d,i){return (submask[i]*4)/zoom.scale()})
-  .attr("fill","red");
+  .attr("fill","#f1a340");
 
 ////////////////////////
 
@@ -1551,7 +1585,7 @@ if(state==0){
   //       .attr("cx",(path2.centroid(feat)[0]))
   //       .attr("cy",(path2.centroid(feat)[1]))
   //       .attr("r",4/zoom.scale())
-  //       .attr("fill","red");
+  //       .attr("fill","#f1a340");
   //   }
   // }
 
@@ -1678,6 +1712,15 @@ slider.noUiSlider.on('change', function ( values, handle ) {
 
 
 function loadmanzanas(d){
+
+var img = svg.append("svg:image")
+    .attr("class","loading")
+    .attr("xlink:href", "loading.gif")
+    .attr("width", 200)
+    .attr("height", 200)
+    .attr("x", 350)
+    .attr("y",200);
+
   triggerzats=0;
   triggermanz=0;
   iszat=0;
@@ -1686,7 +1729,8 @@ function loadmanzanas(d){
   features.selectAll("circle").remove();
   svg.selectAll("circle").remove();
   leyenda.style("display","none");
-  
+
+   
 
 d3.json("manzanas.topojson",function(error,geodata) {
   if (error) return console.log(error); //unknown error, check the console
@@ -1719,7 +1763,11 @@ d3.json("manzanas.topojson",function(error,geodata) {
     values: [100, 1000, 2000,3000,4000, 5000, 6000, 7000],
     density: 4
   }
+
+  
 });
+
+  d3.selectAll(".loading").remove();
 
 
 

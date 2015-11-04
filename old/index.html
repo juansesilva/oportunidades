@@ -1,0 +1,443 @@
+<!--
+
+-->
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- Se establecen los estilos de la página y sus elementos -->
+<style>
+
+body {
+  font-family: sans-serif;
+  font-size: 12px;
+}
+/* color del mapa-dosquebradas*/
+path {
+  stroke-width: 1px;
+  stroke: #1B1B1B;
+  fill: #999;
+  cursor: pointer;
+}
+
+path.q0-6 {
+  fill: #eff3ff;
+}
+
+path.q1-6 {
+  fill: #c6dbef;
+}
+
+path.q2-6 {
+  fill: #9ecae1;
+}
+
+path.q3-6 {
+  fill: #6baed6;
+}
+
+path.q4-6 {
+  fill: #3182bd;
+}
+
+path.q5-6 {
+  fill: #08519c;
+}
+
+path.qclick {
+  fill: #9ecae1;
+}
+
+path.q001 {
+  fill: #e9eff6;
+}
+
+path.q170 {
+  fill: #bdd7e7;
+}
+
+/*div.info {
+  position: absolute;
+  background: lightsteelblue; 
+  border: 1px solid black;
+  color: black;
+  font-weight: bold;
+  padding: 4px 8px;
+  display: none;
+  border: 0px;          
+  border-radius: 8px;
+}*/
+
+div.info {
+  position: absolute; 
+  text-align: left; 
+  padding: 2px; 
+  font: 12px sans-serif;  
+  background: lightsteelblue; 
+  opacity: 0.9;
+  border: 0px;          
+  border-radius: 8px;
+ /*  pointer-events: none;  This line needs to be removed */
+  
+}
+
+svg {
+  /*border-style: solid; */
+  border-color: gray;
+  border-width: 1px;
+}
+
+div.escala {
+  position: absolute;
+  background-color: white;
+  opacity: 0.7;
+  /*border: 1px solid black;*/
+  color: black;
+  font-family: sans-serif;
+  font-size: 10px;
+  display: none;
+  margin-top:-18px;
+  margin-left:692px;
+
+}
+
+div.regla2 {
+  position: absolute;
+  background-color: white;
+  opacity: 0.7;
+  color: black;
+  font-family: sans-serif;
+  font-size: 10px;
+  display: none;
+  margin-top:-30px;
+  margin-left:803px;
+
+}
+
+div.leyenda {
+  position: absolute;
+  background-color: white;
+  opacity: 0.7;
+  color: black;
+  font-family: sans-serif;
+  font-size: 12px;
+  margin-top:-71px;
+  margin-left:759px;
+  display: none;
+
+}
+
+
+/* padding para el botón*/
+ button {
+  padding: 10px 20px;
+}
+
+#buttons{
+  position: absolute;
+}
+
+#buttons-map{
+  position: absolute;
+  margin-left:350px;
+}
+
+/* propiedades generales*/
+*{
+padding : 0;
+margin : 0;
+}
+
+/* estilo del contenedor principal*/
+.blended_grid{
+display : block;
+width : 900px;
+margin : 30px auto 0 auto;
+}
+/* encabezado del título*/
+.pageHeader{
+  background-color : #FFF;
+  float : left;
+  clear : none;
+  height : 200px;
+  width : 900px;
+  font-size: 16px;
+}
+/* Barra inferior con los parámetros*/
+.pageLeftMenu{
+  background-color : #FFF;
+  float : left;
+  clear : none;
+  height : 400px;
+  width : 900px;
+}
+/* Contenedor del mapa*/
+.pageContent{
+  background-color : #FFF;
+  float : left;
+  clear : none;
+  height : 600px;
+  width : 900px;
+  border-top-color: #000;
+  border-right-color: #000;
+  border-bottom-color: #000;
+  border-left-color: #000;
+}
+/* pie de página, logos y nombres*/
+.pageFooter{
+  background-color : #FFF;
+  float : left;
+  clear : none;
+  height : 150px;
+  width : 900px;
+}
+/* contenedor para los nombres*/
+.nombresito{
+  background-color : #FFF;
+  float : left;
+  clear : none;
+  height : 150px;
+  width : 200px;
+}
+/* contenedor para los logos*/
+.imagen{
+  background-color : #FFF;
+  float : left;
+  height : 150px;
+  width : 225px;
+  display: inline-block;
+}
+
+.regla{
+  /*background-color : #FFF;*/
+  float : left;
+  display: inline-block;
+  position: absolute;
+  margin-top:583px;
+  margin-left:775px;
+}
+
+.norte{
+
+  float : left;
+  display: inline-block;
+  position: absolute;
+  margin-left:850px;
+
+}
+
+/* contenedor para los checkbox*/
+.modo{
+  background-color : #FFF;
+  float : left;
+  clear : none;
+  height : 200px;
+  width : 300px;
+}
+
+.animate{
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  -webkit-animation: dash 5s linear forwards;
+          animation: dash 5s linear forwards;
+}
+
+@-webkit-keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* color del mapa-Pereira*/
+
+path.paint { fill: #41b6c4; }
+
+
+
+path:hover, path.highlighted {
+  fill: #41b6c4;
+}
+
+
+#cidt{
+  margin-top:55px;
+}
+
+#utp{
+  margin-top:55px;
+}
+
+#sirius{
+  margin-top:15px;
+}
+
+/* estilo del titulo*/
+.blended_grid .pageHeader h1 {
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+h1 {
+    text-shadow: 2px 2px #D8DCDC;
+} 
+</style>
+
+
+<!DOCTYPE html>
+<head>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<link href="lib/nouislider.min.css" rel="stylesheet">
+
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Oportunidades acumuladas</title>
+<meta name="Oportunidades acumuladas" content="Visualización de oportunidades acumuladas para servicios de salud de pereira y dosquebradas">
+</head>
+
+
+<body>
+<div class="blended_grid">
+  <!-- Contenedor principal -->
+  <div class="pageHeader">
+    <!-- encabezado, título y contenido -->
+    <h1 align="center" >OPORTUNIDADES ACUMULADAS</h1>
+
+    <p align="center">&nbsp;</p>
+    <div style="text-align: justify">
+    <p >Esta visualización permite explorar los datos de puntos de interés del Area Metropolitana Centro Occidente <strong>AMCO.</strong><br>
+    </p>
+
+
+  </div>
+  </div>
+
+
+  <div class="pageContent" id="main">
+    <!-- contenedor del mapa y botones de zoom-->
+    <div id='buttons' class="btn-group" role="group">
+      <button type="button" class="btn btn-primary" id="zoom_in">+</button>
+      <button type="button" class="btn btn-primary" id="zoom_out">-</button>
+    </div>
+
+    <div class="btn-group" role="group" aria-label="Basic example" id='buttons-map'>
+      <button type="button" id="buttonzats" class="btn btn-primary active" >Zats</button>
+      <button type="button" id="buttonmanzanas" class="btn btn-warning">Manzanas</button>
+    </div>
+
+    <!-- contenedor del indicador de norte-->
+    <div class="norte"  align="center"> <img  id="norte" src="logo/norte.png" width="50" ></div>
+        <!-- contenedor del indicador de la escala-->
+    <div class="regla"  align="center"> <img  id="regla" src="logo/regla.png" width="120" ></div>
+
+  </div>
+
+<p>&nbsp;</p>
+  <div class="pageLeftMenu">
+  <!-- contenedor de los parametros de la visualizacion -->
+    <div id='slidebar'>
+    <div id='slider'></div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p> 
+    Distancia: <input type="text" id="input-with-keypress">
+    </div>
+
+  <div class="modo" >
+    <!-- contenedor de las opciones de modo -->
+    <p>&nbsp;</p>
+      
+    <DIV style="WIDTH:200px; HEIGHT:130px" id="modos">
+      <label><b>Ver por tipo de entidades</b></label><br>
+              
+      <input id="1" type="checkbox" checked/> Ver entidades Públicas<br>
+      <input id="2" type="checkbox" checked/> Ver entidades Privadas<br>
+      
+    </DIV>
+
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="instrucciones">Instrucciones</button>
+  </div>
+ 
+ <p>&nbsp;</p>
+
+
+     <label><b>Cambiar Medida de distancia</b></label><br>
+    <p>
+      <input type="radio" id="r1" name="sentido" value="desde" checked="checked">
+      Distancia en metros</input><br>
+    <input type="radio" id="r2" name="sentido" value="hacia"> Distancia en tiempo de viaje</input><br>
+    </p>
+    <p>&nbsp;</p>
+
+
+
+
+  </div>
+
+
+
+  <div class="pageFooter">
+    <!-- contenedor de las imagenes y los nombres -->
+
+    <div class="imagen" align="center" > <a target="_blank" href="http://www.reddenodos.com"><img src="logo/logo_red.png" width="150" ></a></div>
+
+    <div class="imagen"  align="center"> <img  id="cidt" src="logo/logo_cidt.png" width="150" ></div>
+
+    <div class="imagen"  align="center" ><a target="_blank" href="http://www.utp.edu.co"> <img id="utp" src="logo/logo_utp.png" width="150" ></a></div>
+
+    <div class="imagen" align="center"><a target="_blank" href="http://sirius.utp.edu.co"> <img id="sirius" src="logo/logo_sirius.png" width="150" ></a></div>
+
+
+
+  </div>
+</div>
+
+<div class="modal fade" id="prizePopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+                Cómo se utiliza esta visualización
+            </h4>
+        </div>
+        <div class="modal-body">
+            Esta visualización se compone de dos partes: Coropleta que se activa al cargar la página o al presionar los botones zats (azul) o manzanas (naranja), donde la intensidad del color en el mapa ilustra la cantidad de oportunidades alcanzadas con el umbral establecido por la barra de deslizamiento o el campo de texto, ubicadas debajo del mapa. Así mismo, el usuario también puede decidir si visualizar entre entidades privadas y públicas por medio de las cajas de chequeo ubicadas bajo el mapa. Al pasar el mouse sobre cada zat/manzana es posible ver la cantidad de oportunidades alcanzadas.
+        </div>
+        <div class="modal-body">
+            La segunda parte de la visualización consiste en la visualización exacta de las entidades en el mapa, discriminando por color las públicas de las privadas. Al dar click sobre un zat/manzana, se calculan y grafican las entidades que se encuentran a una distancia menor al umbral establecido por medio de la barra de deslizamiento. Al pasar el mouse sobre cada entidad, se puede ver información de interés como nombre, teléfono, gerente, dirección y correo electrónico o pàgina web. Para regresar a la vista de coropleta, es necesario dar click a los botones zats (azul) o manzanas (naranja) según el mapa que se desee ver.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Entendido</button>
+        </div>
+    </div>
+</div>
+
+<!-- importo librerías para hacer uso de métodos D3 -->
+<script src="lib/nouislider.min.js"></script>
+<script src="lib/jquery-2.1.4.min.js"></script>
+<script src="lib/d3.v3.min.js"></script>
+<script src="lib/topojson.v1.min.js"></script>
+<script src="lib/queue.v1.min.js"></script>
+<script src="lib/bootstrap.min.js"></script>
+
+
+
+
+<!-- importo el codigo javascript -->
+<script src="code.js"></script>
+
+
+
+</body>
+</html>
